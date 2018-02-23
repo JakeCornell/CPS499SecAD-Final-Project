@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head><title>Professional profile of Jacob J. Cornell</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<!--document.write("Content generated from document.write");
+document.write("<script>alert('script code is generated within script code');</"+"script>"); -->
+
+<script>
+if (document.cookie.indexOf("username") < 0 ){
+	alert('no username in cookie');
+	document.cookie = "username=cornellj1";
+}else
+	alert("my cookie: " + document.cookie);
+
+function startTime(){
+	document.getElementById('clock').innerHTML = new Date();
+	setTimeout(startTime, 500);
+}
+var shown = false;
+function showhide(){
+	if (shown){
+      document.getElementById('email').innerHTML = "Show my email";
+	  shown = false;
+    }else{
+	  var myemail = "<a href='mailto:cornellj1"+ "@" + "udayton.edu'>cornellj1" +  "@" + "udayton.edu</a>";
+      document.getElementById('email').innerHTML= myemail;
+      shown = true;
+    }
+}
+</script> 
+
+<body onload="startTime()">
+
+<h1>Secure Application Development - Spring 2018</h1>
+<p>A simple HTML page example for Lab 4 by Jake Cornell.</p>
+<img alt ="Jacob J. Cornell" src='jake.jpg' height="200"/>
+
+<div id="email" onclick="showhide()">Show my email</div>
+
+<br>
+Current time: <div id="clock"></div>
+
+<script src="https://academic.udayton.edu/PhuPhung/remote.js"> </script>
+
+</body>
+</html>
