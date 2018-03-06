@@ -36,7 +36,7 @@ public class EchoServer {
 class EchoServerThread extends Thread{
 	private Socket clientSocket = null;
 	private PrintWriter out = null;
-	ThreadList threadlist = null;
+	private ThreadList threadlist = null;
 	public EchoServerThread(Socket socket){
 		clientSocket = socket;
 	}
@@ -50,7 +50,7 @@ class EchoServerThread extends Thread{
 		System.out.println("Inside Thread: Total Clients: " + threadlist.getNumberofThreads());
 	try {
 	    	
-	    PrintWriter out =
+	    /*PrintWriter*/ out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 	    	
             BufferedReader in = new BufferedReader(
@@ -98,16 +98,11 @@ class ThreadList{
 		threadlist.remove(thread);	//remove the given thread from the threadlist		
 	}
 	public synchronized void sendToAll(String message){
-		/*for(int i = 0; i < getNumberofThreads(); i++){
-			if(message != null){
-				thread.send(message);
-			}
-		}*/
-		for (EchoServerThread thread : threadlist){
-			thread.send(message);
+		Iterator<EchoServerThread> threadlistIterator = threadlist.iterator();
+            	while (threadlistIterator.hasNext()) {
+                	EchoServerThread thread = threadlistIterator.next();
+                	thread.send(message);
 		}
 		//ask each thread in the threadlist to send the given message to its client		
 	}
 }
-
-
