@@ -2,9 +2,14 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.*;
+import java.io.BufferedReader;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.Scanner;
 
 public class EchoServer {
     static ThreadList threadlist = new ThreadList();
+    
     public static void main(String[] args) throws IOException {
         
         if (args.length != 1) {
@@ -37,12 +42,51 @@ class EchoServerThread extends Thread{
 	private Socket clientSocket = null;
 	private PrintWriter out = null;
 	private ThreadList threadlist = null;
+	private String username = "";
+	private String password;
+	private BufferedReader in = null;
+	private static HashSet<String> list = new HashSet<String>();
+
+	
+
 	public EchoServerThread(Socket socket){
 		clientSocket = socket;
 	}
 	public EchoServerThread(ThreadList threadlist, Socket socket){
 		this.threadlist = threadlist;
 		clientSocket = socket;
+	}
+
+	private boolean checkLogin(String username, String password){
+		boolean validUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
+		boolean validPassword = (password != null) && password.matches("[A-Za-z0-9_]+");
+		
+	try{
+		if (validUsername == true){
+			return true;
+		}else{	
+			this.send("Please choose a valid username");
+			threadlist.sendToAll("To All: A client exists, the number of connected client:" + (threadlist.getNumberofThreads()-1));
+			threadlist.removeThread(this);
+			clientSocket.close();
+			
+		}
+		
+		if (validPassword == true){
+			return true;
+		}else{	
+			this.send("Please choose a valid password");
+			threadlist.sendToAll("To All: A client exists, the number of connected client:" + (threadlist.getNumberofThreads()-1));
+			threadlist.removeThread(this);
+			clientSocket.close();
+			
+		}
+		
+	}catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+	return false;	
 	}
 
 	public void run(){
@@ -56,21 +100,45 @@ class EchoServerThread extends Thread{
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream()));
 
+		
             String inputLine;
+	    this.send("Please enter a username: ");
+	    if((inputLine = in.readLine()) != null){
+		username = inputLine;
+		if((password = in.readLine()) != null){
+			if(checkLogin(username, password)){
+				this.send("Welcome " + username);
+				list.add(username);
+				this.send("Here is a list of commands:");
+				this.send("<LIST> , <ALL> , <PM>");
+			}
+		}
+		
+	    }
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("received from client: " + inputLine);
                 System.out.println("Echo back");
                 //out.println(inputLine);
+		if(inputLine.equals("<LIST>")){
+			out.println(list.toString());
+		}
+		if(inputLine.equals("<ALL>")){
+			Scanner input = new Scanner(System.in);
+			String mess = input.next();
+			threadlist.sendToAll("To All:"+ mess);
+		}
+		if(inputLine.equals("<PM>")){
+			if(list.equals(username)){
+                		threadlist.sendPrivate(message);
+			}
+		}
 		if(inputLine.equals("<exit>")){
 			threadlist.sendToAll("To All: A client exists, the number of connected client:" + (threadlist.getNumberofThreads()-1));
 			threadlist.removeThread(this);
 			clientSocket.close();
-		}else{
-			threadlist.sendToAll("To All <new message>:"+ inputLine);
 		}
 	    }
-        } catch (IOException e) {
-            
+        } catch (IOException e) {          
             System.out.println(e.getMessage());
         }
 	
@@ -85,7 +153,8 @@ class EchoServerThread extends Thread{
 
 
 class ThreadList{
-	private ArrayList<EchoServerThread> threadlist = new ArrayList<EchoServerThread>(); //store the list of threads in this variable	
+	private ArrayList<EchoServerThread> threadlist = new ArrayList<EchoServerThread>(); //store the list of threads in this variable
+	
 	public ThreadList(){		
 	}
 	public synchronized int getNumberofThreads(){
@@ -105,4 +174,8 @@ class ThreadList{
 		}
 		//ask each thread in the threadlist to send the given message to its client		
 	}
+	public synchronized void sendPrivate(String message){
+		thread.send(message);
+	}
+
 }
