@@ -57,6 +57,7 @@ class EchoServerThread extends Thread{
 		clientSocket = socket;
 	}
 
+	// Checks to make sure login is valid
 	private boolean checkLogin(String username, String password){
 		boolean validUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
 		boolean validPassword = (password != null) && password.matches("[A-Za-z0-9_]+");
@@ -100,7 +101,7 @@ class EchoServerThread extends Thread{
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream()));
 
-		
+		// Get a username and password
             String inputLine;
 	    this.send("Please enter a username: ");
 	    if((inputLine = in.readLine()) != null){
@@ -119,14 +120,17 @@ class EchoServerThread extends Thread{
                 System.out.println("received from client: " + inputLine);
                 System.out.println("Echo back");
                 //out.println(inputLine);
+		// get a list of users
 		if(inputLine.equals("<LIST>")){
 			out.println(list.toString());
 		}
+		//send a message to all
 		if(inputLine.equals("<ALL>")){
 			Scanner input = new Scanner(System.in);
 			String mess = input.next();
 			threadlist.sendToAll("To All:"+ mess);
 		}
+		// private message another user
 		if(inputLine.equals("<PM>")){
 			Scanner input2 = new Scanner(System.in);
 			String mess2 = input2.next();
@@ -135,6 +139,7 @@ class EchoServerThread extends Thread{
 			}
 			
 		}
+		// exit the client
 		if(inputLine.equals("<exit>")){
 			threadlist.sendToAll("To All: A client exists, the number of connected client:" + (threadlist.getNumberofThreads()-1));
 			threadlist.removeThread(this);
