@@ -128,9 +128,10 @@ class EchoServerThread extends Thread{
 			threadlist.sendToAll("To All:"+ mess);
 		}
 		if(inputLine.equals("<PM>")){
-			if(list.equals(username)){
-                		threadlist.sendPrivate(message);
-			}
+			Scanner input2 = new Scanner(System.in);
+			String mess2 = input2.next();
+                	threadlist.sendPrivate(mess2);
+			
 		}
 		if(inputLine.equals("<exit>")){
 			threadlist.sendToAll("To All: A client exists, the number of connected client:" + (threadlist.getNumberofThreads()-1));
@@ -174,8 +175,4 @@ class ThreadList{
 		}
 		//ask each thread in the threadlist to send the given message to its client		
 	}
-	public synchronized void sendPrivate(String message){
-		thread.send(message);
-	}
-
 }
