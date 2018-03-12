@@ -1,4 +1,6 @@
 <?php
+  ini_set("session.cookie_httponly", True);
+  ini_set("session.cookie_secure", True);
   session_start();
   //echo "->auth.php";
   require 'mysql.php';
