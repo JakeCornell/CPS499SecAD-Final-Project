@@ -1,9 +1,9 @@
 <?php
   echo "->mysql.php"; //for debug only; delete this line after the complete development
   //Security principle: Never use the root database account in the web application
-  $mysqli = new mysqli('localhost', '<database-username-created>' /*Database username*/,
-                                    '<db-password>'  /*Database password*/, 
-                                    '<database-name>' /*Database name*/);
+  $mysqli = new mysqli('localhost', 'sp2018secad' /*Database username*/,
+                                    'dees'  /*Database password*/, 
+                                    'sp2018secad' /*Database name*/);
 
   if ($mysqli->connect_error) {
       die('Connect Error (' . $mysqli->connect_errno . ') '
@@ -26,4 +26,32 @@
     return FALSE;
 
   }
+
+
+
+  function mysql_checklogin_secure($username, $password) {
+    global $mysqli;
+    echo "->mysql.php:Debug>->mysql_checklogin_secure"; //for debug only; delete this line after the complete development
+    
+    $prepared_sql = "SELECT * FROM users where username = ?"
+                    . " and password=password(?)";
+
+    if(!$stmt = $mysqli->prepare($prepared_sql))
+      echo "Prepared Statement Error";
+
+    $stmt->bind_param("ss", $username, $password);
+
+    if(!$stmt->execute()) echo "Execute Error";
+
+    if(!$stmt->store_result()) echo "Store_result Error";
+
+    if($stmt->num_rows == 1){
+	echo "->mysql.php:Debug>username/password found";
+	return TRUE;
+    else{
+	echo "->mysql.php:Debug>username/password NOT found";
+    }
+    return FALSE;
+  }
+
 ?>
