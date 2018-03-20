@@ -38,9 +38,14 @@
     if(!$stmt->execute()) echo "Execute Error";
 
     if(!$stmt->store_result()) echo "Store_result Error";
+    $result=$stmt;
 
-    if($stmt->num_rows == 1) return TRUE;
-
+    if($stmt->num_rows == 1){
+	echo "->mysql.php:Debug>username/password found";
+	return TRUE;
+    else{
+	echo "->mysql.php:Debug>username/password NOT found";
+    }
     return FALSE;
   }
 ?>
