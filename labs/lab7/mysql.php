@@ -31,8 +31,6 @@
 
   function mysql_checklogin_secure($username, $password) {
     global $mysqli;
-    echo "->mysql.php:Debug>->mysql_checklogin_secure"; //for debug only; delete this line after the complete development
-    
     $prepared_sql = "SELECT * FROM users where username = ?"
                     . " and password=password(?)";
 
@@ -45,24 +43,20 @@
 
     if(!$stmt->store_result()) echo "Store_result Error";
 
-    if($stmt->num_rows == 1){
-	echo "->mysql.php:Debug>username/password found";
-	return TRUE;
-    else{
-	echo "->mysql.php:Debug>username/password NOT found";
-    }
+    if($stmt->num_rows == 1) return TRUE;
+
     return FALSE;
   }
 
 
-  function mysql_change_users_password($username, $password) {
+  function mysql_change_users_password($username, $newpassword) {
     global $mysqli; 
-    $prepared_sql = "UPDATE users  SET password=password(?) where username = ?;";
+    $prepared_sql = "UPDATE users  SET password=password(?) WHERE username = ?;";
 
     if(!$stmt = $mysqli->prepare($prepared_sql))
       echo "Prepared Statement Error";
 
-    $stmt->bind_param("ss", $username, $password);
+    $stmt->bind_param("ss", $newpassword, $username);
 
     if(!$stmt->execute()){
 	echo "Execute Error:UPDATE users SET password=password(?) WHERE username= ?;";

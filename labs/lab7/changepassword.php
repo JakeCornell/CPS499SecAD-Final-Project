@@ -2,9 +2,14 @@
   require 'secureauthentication.php';
   $username = $_REQUEST['username'];
   $newpassword = $_REQUEST['newpassword'];
+  $nocsrftoken = $_POST["nocsrftoken"];
+  $sessionnocsrftoken = $_SESSION["nocsrftoken"];
+
   if (isset($username) and isset($newpassword) ){
     if($username!=$_SESSION["username"]){
-	echo "Cannot change";
+	echo "Cannot change password: '" . $_SESSION["username"] . "' CANNOT change password for '$username'";
+	die();
+    }
     echo "changing password for '$username' <br>";
     if (mysql_change_users_password($username, $newpassword)){
       echo "Success!";

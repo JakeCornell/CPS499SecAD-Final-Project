@@ -6,11 +6,11 @@
   require 'mysql.php';
   if (isset($_POST["username"]) and isset($_POST["password"]) ){
     //echo "->auth.php:Debug>has username/password";
-    if (mysql_checklogin_secure($_POST["username"],$_POST["password"])) 
+    if (mysql_checklogin_secure($_POST["username"],$_POST["password"])){ 
       $_SESSION["logged"] = TRUE;
-      $_SESSION["logged"] = TRUE; //change
-      $_SESSION["logged"] = TRUE; //change
-    else{
+      $_SESSION["browser"] = $_SERVER["HTTP_USER_AGENT"];
+      $_SESSION["username"] = $_POST["username"];
+    }else{
 	     echo "<script>alert('Invalid username/password');</script>";
 	     unset($_SESSION["logged"]); 
     }
