@@ -3,7 +3,10 @@
   $username = $_REQUEST['username'];
   $newpassword = $_REQUEST['newpassword'];
   $nocsrftoken = $_POST["nocsrftoken"];
-  $sessionnocsrftoken = $_SESSION["nocsrftoken"];
+  if(!isset($nocsrftoken) or ($nocsrftoken!=$_SESSION['nocsrftoken'])){
+	echo "Cross-site request forgery is detected!";
+	die();
+  }
 
   if (isset($username) and isset($newpassword) ){
     if($username!=$_SESSION["username"]){
