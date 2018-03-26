@@ -14,7 +14,7 @@
                 Password: <input type="password" class="text_field" name="password"
 			required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
 			title="Password muist have at least 6 characters with 1 number. 1 lowercase, and 1 UPPERCASE"
-			onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');" /> <br>
+			onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
                 <button class="button" type="submit">
                   Login
                 </button>
