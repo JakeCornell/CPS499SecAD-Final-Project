@@ -6,17 +6,17 @@ CREATE TABLE users (
 
 DROP TABLE IF EXISTS posts;
 CREATE TABLE posts (
-	postid int(11) PRIMARY KEY AUTO_INCREMENT,
+	id int(11) PRIMARY KEY AUTO_INCREMENT,
 	title varchar(255) NOT NULL,
-	content text NOT NULL,
-	time datetime DEFAULT NULL,
+	text text NOT NULL,
+	published datetime DEFAULT NULL,
 	owner varchar(50),
 	FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS comments;
 CREATE TABLE comments (
-	commentid int(11) PRIMARY KEY AUTO_INCREMENT,
+	id int(11) PRIMARY KEY AUTO_INCREMENT,
 	title varchar(255) NOT NULL,
 	content text NOT NULL,
 	commmenter varchar(255),

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<script>
+function startTime() {
+    document.getElementById('clock').innerHTML = new Date();
+    setTimeout(startTime, 500);
+}
+function clearHints() {
+    document.getElementById("hints").innerHTML = "";
+    document.getElementById("hints").style.border = "0px";
+}
+function showHints(hints) {
+    document.getElementById("hints").innerHTML= hints;      	
+	  document.getElementById("hints").style.border = "1px solid #A5ACB2";
+}
+function getHints(str) {
+	//alert("displayHints");
+	if (str.length == 0) {
+        clearHints();
+        return;
+  }
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+	  	if (this.readyState == 4 && 
+			this.status == 200){
+  			showHints(xhttp.responseText);
+  		}
+	}
+	xhttp.open("GET", "hints.php?q="+str, true);
+	xhttp.send();
+}
+</script>
+
+<body onload="startTime()">
+Current time: <div id="clock"></div>
+
+<input type = "text" size = "30" onkeyup="getHints(this.value)"/>
+<div id = "hints"></div>
+
+
+</body>
+</html>
