@@ -103,17 +103,8 @@
        if($num_rows==0) echo "No comment for this post. PLease post your comment";
   }
 
-  function new_post($title,$content,$commenter){
-	global $mysqli;
-	$preapred_sql = "INSERT into posts (title,content,commenter) VALUES (?,?,?);";
-	if(!$stmt = $mysqli->preapre($prepared_sql)){
-		echo "Prepared Statement Error";
-	}
-	$stmt->bind_param("sssi", htmlspecialchars($title), htmlspecialchars($content), htmlspecialchars($commenter));
 
-	if(!$stmt->execute()) { echo "Execute Error"; return FALSE; }
-	return TRUE;
-  }
+  
 
   function new_comment($postid,$title,$content,$commenter){
 	global $mysqli;
