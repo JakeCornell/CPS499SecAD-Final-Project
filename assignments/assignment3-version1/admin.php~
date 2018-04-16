@@ -4,15 +4,3 @@
 <h2> Administration of My Blog</h2>
 <a href="index.php">Home</a> | <a href="edit.php">Manage Post</a> | <a href="new.php">New Post</a> | <a href="changepasswordform.php">Change Password</a> | <a href="logout.php">Logout</a> 
 
-
-<?php  
-  $posts= Post::all();
-
-  foreach ($posts as $post) {
-    echo "<tr>";
-    echo "<td><a href=\"../post.php?id=".h($post->id)."\">".h($post->title)."</a></td>";
-    echo "<td><a href=\"edit.php?id=".h($post->id)."\">edit</a></td>";
-    echo "<td><a href=\"del.php?id=".h($post->id)."\">delete</a></td>";
-    echo "</tr>";
-  }
-?>

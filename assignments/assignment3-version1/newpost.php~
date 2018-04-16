@@ -1,5 +1,7 @@
 <?php 
   require 'secureauthentication.php';
+  require 'mysql.php';
+
   $username = $_REQUEST['username'];
   $newpassword = $_REQUEST['newpassword'];
   $nocsrftoken = $_POST["nocsrftoken"];
@@ -8,21 +10,15 @@
 	die();
   }
 
-  if (isset($username) and isset($newpassword) ){
-    if($username!=$_SESSION["username"]){
-	echo "Cannot change password: '" . $_SESSION["username"] . "' CANNOT change password for '$username'";
-	die();
-    }
-    echo "changing password for '$username' <br>";
-    if (mysql_change_users_password($username, $newpassword)){
-      echo "Success!";
-    }else{
-      echo "Failed!";
-    }
-  } else{
-    echo "Cannot change password: username and password is not provided";
-  }
+  new_post();
 
 ?>
-<h2> Authenticated and active session!</h2>
-<a href="index.php">Admin page </a> | <a href="logout.php">Logout</a> 
+
+<form action="index.php" method="POST" enctype="multipart/form-data">
+    Title: <input type="text" name="title" /><br/>
+    Text: <textarea name="text" cols="80" rows="5">
+        </textarea><br/>
+
+    <input type="submit" name="Add" value="Add">
+
+</form>

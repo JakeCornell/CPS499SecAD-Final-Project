@@ -1,24 +1,42 @@
 <?php 
-  require 'secureauthentication.php';
-  require 'mysql.php';
+  require 'admin.php';
 
-  $username = $_REQUEST['username'];
-  $newpassword = $_REQUEST['newpassword'];
-  $nocsrftoken = $_POST["nocsrftoken"];
-  if(!isset($nocsrftoken) or ($nocsrftoken!=$_SESSION['nocsrftoken'])){
-	echo "Cross-site request forgery is detected!";
-	die();
+  function handle_new_post(){
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+    $owner = $_POST['owner'];
+    $nocsrftoken = $_POST['nocsrftoken'];
+    $sessionnocsrftoken = $_SESSION['nocsrftoken'];
+
+    if(isset($title) and isset($content)){
+      if(!isset($nocsrftoken) or ($nocsrftoken != $sessionnocsrftoken)){
+        echo "Cross Site Request Forgery Detected";
+        die();
+      }
+
+      if(new_post($title,$content,$owner))
+        echo "Post added!";
+      else
+        echo "Post was not added!";
+    }
   }
 
-  new_post();
-
+  handle_new_post();
+  $rand = bin2hex(openssl_random_pseudo_bytes(16));
+  $_SESSION['nocsrftoken'] = $rand;
 ?>
 
-<form action="index.php" method="POST" enctype="multipart/form-data">
-    Title: <input type="text" name="title" /><br/>
-    Text: <textarea name="text" cols="80" rows="5">
-        </textarea><br/>
 
-    <input type="submit" name="Add" value="Add">
-
+<form action="newpost.php" method="POST" class="form login">
+                <input type="hidden" name="nocsrftoken" value="<?php echo $rand; ?>" />
+                Your Name: <input type="text" name="owner" required/>
+                <br>
+                Title: <input type="text" name="title" required/>
+                <br>
+                Content: <textarea name="content" required cols="100" rows="10"></textarea>
+                <br>
+                <button class="button" type="submit">
+                  Submit Post
+                </button>
 </form>
+
