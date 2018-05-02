@@ -66,8 +66,30 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'Test','This is a test','0000-00-00 00:00:00','Admin');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `super_users`
+--
+
+DROP TABLE IF EXISTS `super_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `super_users` (
+  `username` varchar(50) NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `super_users`
+--
+
+LOCK TABLES `super_users` WRITE;
+/*!40000 ALTER TABLE `super_users` DISABLE KEYS */;
+INSERT INTO `super_users` VALUES ('admin'),('test');
+/*!40000 ALTER TABLE `super_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -80,6 +102,12 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
+  `FirstName` varchar(50) NOT NULL,
+  `LastName` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone` varchar(50) NOT NULL,
+  `approved` tinyint(1) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -90,7 +118,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('admin','*E6A37D1DC5D053D502CF527EBD97BDDFC76963F3');
+INSERT INTO `users` VALUES ('admin','*4ACFE3202A5FF5CF467898FC58AAB1D615029441','Jake','Cornell','cornellj1@udayton.edu','(419)360-2004',1,1),('jake16','*E6A37D1DC5D053D502CF527EBD97BDDFC76963F3','Jake','Cornell','jakecornell16@gmail.com','(419)360-2004',1,1),('testUser','*48B1BB7AD34484EF0632D4B9A748CC861DFBE88B','Test','User','test@gmail.com','(555)555-5555',0,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -103,4 +131,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-04 20:17:55
+-- Dump completed on 2018-05-01  7:55:44

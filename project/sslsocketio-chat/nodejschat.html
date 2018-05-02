@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+    socketio = io.connect("192.168.56.100:8888",{secure:true});
+    var username = prompt("Please enter your name", "");
+    socketio.emit("<JOIN>",username);
+    socketio.on("<CHAT>", function(msg){ //receive a “chat” event
+      console.log('<CHAT>Received from server: ' + msg);
+	    printMessage(msg); //update the message
+    });
+    socketio.on("<JOIN>", function(username){ //receive a “<JOIN>” event
+        printMessage(username); //update the message
+	      console.log('<JOIN>Received from server: ' + username);
+	
+    });
+
+    socketio.on("<TYPING>", function(msg){ 
+        document.getElementById("typing").innerHTML = msg;		
+        setTimeout(function(){document.getElementById("typing").innerHTML = "<br>";},1000);
+	      console.log('<TYPING>Received from server: ' + msg);
+	
+    });
+    socketio.on("<URLIST>", function(msg){
+        document.getElementById("userlist").innerHTML = msg;		
+	      console.log('<URLIST>Received from server: ' + msg);
+	
+    });
+    function emitChat(msg) {
+        socketio.emit("<CHAT>",msg);
+        console.log('Sent to server: <CHAT>' + msg);
+    }
+	function entertoSend(e){
+    	    //alert("keycode =" + e.keyCode);
+    		if(e.keyCode==13){//enter
+    			send();
+    		}else {
+                socketio.emit("<TYPE>");
+            }
+        }
+        function sendTyping(){
+                socketio.emit("<TYPE>");
+		console.log('Sent to server: <TYPE>');
+        }
+
+    function printMessage(msg) {
+        document.getElementById("messages").innerHTML +=  msg + "<br>";
+    }
+
+    function send() {
+	    //alert("send");
+            var msg = document.getElementById("messageinput").value;
+            emitChat(msg);           
+	    document.getElementById("messageinput").value ="";
+    }
+    function startTime() {
+      document.getElementById('clock').innerHTML = new Date();
+      setTimeout(startTime, 500);
+    }
+
+</script>
+
+<body onload="startTime()">
+Current time: <div id="clock"></div>
+
+<div id="typing"></div>
+<input type="text" id="messageinput" onkeypress="entertoSend(event)" onkeyup="sendTyping()" />
+
+<button type="button" onclick="send();">Send</button> <button type="button" onclick="quit();">Quit chat</button>
+<br>
+Userlist: <br> 
+<div id="userlist"></div>
+<hr>
+Chat messages: <br>
+<div id="messages"></div>
+
+</body>
+</html>

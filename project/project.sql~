@@ -39,6 +39,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+INSERT INTO `comments` VALUES (1,'Test Comment','This is a test comment','Tester',NULL,1),(2,'Test Comment','This is a test comment','Tester',NULL,1),(3,'Comment','This is a comment for this test post','Gustavo',NULL,1),(4,'CSS Test Title','This comment is to make sure that comment.php still works with the new CSS.','Gustavo',NULL,1),(5,'Testing new comment.php','This comment is to make sure that comment.php is working correctly with anonymous user','Guest',NULL,7),(6,'Logged in comment','This is a comment to make sure that when a user is logged in it logs the username as the commenter in the database.','gusvano',NULL,7);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,8 +67,31 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'Test','This is a test','0000-00-00 00:00:00','Admin');
+INSERT INTO `posts` VALUES (1,'New Post','This is a new post to test newpost.php. This is an edited post. changed. yes','2018-04-04 14:13:28','Admin',1),(3,'Test Post','This is a test post to make it look like the page has content','2018-04-04 16:32:13','Admin',1),(4,'XSS Test Post','&lt;script&gt;alert(\'This is an attack\');&lt;/script&gt;\r\nThis is to test if page is vulnerable to XSS','2018-04-04 16:32:54','Admin',0),(5,'Test with CSS','This is  a test post to make sure that newpost.php is still working with the new CSS.','2018-04-10 12:54:11','Admin',1),(7,'gusvano test post','This post is to test is show_user_posts()','2018-04-24 13:34:08','gusvano',1);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `super_users`
+--
+
+DROP TABLE IF EXISTS `super_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `super_users` (
+  `username` varchar(50) NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `super_users`
+--
+
+LOCK TABLES `super_users` WRITE;
+/*!40000 ALTER TABLE `super_users` DISABLE KEYS */;
+INSERT INTO `super_users` VALUES ('admin'),('test');
+/*!40000 ALTER TABLE `super_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -80,6 +104,12 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
+  `FirstName` varchar(50) NOT NULL,
+  `LastName` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone` varchar(50) NOT NULL,
+  `approved` tinyint(1) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -90,7 +120,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('admin','*E6A37D1DC5D053D502CF527EBD97BDDFC76963F3');
+INSERT INTO `users` VALUES ('admin','*4ACFE3202A5FF5CF467898FC58AAB1D615029441','Jake','Cornell','cornellj1@udayton.edu','(419)360-2004',1,1),('jake16','*E6A37D1DC5D053D502CF527EBD97BDDFC76963F3','Jake','Cornell','jakecornell16@gmail.com','(419)360-2004',1,1),('testUser','*48B1BB7AD34484EF0632D4B9A748CC861DFBE88B','Test','User','test@gmail.com','(555)555-5555',0,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -103,4 +133,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-04 20:17:55
+-- Dump completed on 2018-05-01  7:49:04
